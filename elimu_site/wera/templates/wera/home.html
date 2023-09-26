@@ -1,1 +1,26 @@
+ {% extends "wera/main.html" %}
+
+
+ {% block content%}
 <h1>Home welcome</h1>
+
+
+
+
+
+<div>
+
+<div>
+    {%  for team in teams %}
+
+    <div>
+    <h5>{{team.id}} --{{team.name}}</h5>
+
+    </div>
+
+    {%  endfor %}
+</div>
+
+</div>
+
+{% endblock %}
