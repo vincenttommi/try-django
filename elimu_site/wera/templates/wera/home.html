@@ -10,15 +10,17 @@
 
 <div>
 
+
+<a href="{% url 'create-room'%}">Create  Room</a>
 <div>
-    {%  for team in teams %}
+    {%  for room in rooms %}
 
     <div>
 
         
-        <span>@{{team.host.username}}</span>
-    <h5>{{team.id}} --{{team.name}}</h5>
-    <small>{{team.topic.name}}</small> 
+        <span>@{{room.host.username}}</span>
+    <h5>{{room.id}} --{{room.name}}</h5>
+    <small>{{room.topic.name}}</small> 
 
 
     <hr>

@@ -1,0 +1,14 @@
+{% extends  "wera/main.html" %}
+
+{%  block content  %}
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        {% comment %} prevnets malicious attempts when sending data from cross-site forgeries {% endcomment %}
+         <input type="submit"   value="Submit"/>
+    </form>
+</div
+
+{% endblock  %}
