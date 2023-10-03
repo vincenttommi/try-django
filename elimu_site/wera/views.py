@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.shortcuts import HttpResponse
 from . models import  Room
 from  .forms import RoomForm
 # importing model Room
@@ -26,41 +27,17 @@ def navbar(request):
 
   # Import your RoomForm if not already imported
 
-
-# def  createRoom(request):
-#     form =  RoomForm()
-#     if request.method  == 'POST':
-#         print(request.POST)
-        
-#         context  = {'form': form}
-#         return render(request,'wera/room_form.html', context) 
             
 def createRoom(request):
-    # if request.method == 'POST':
-    #     form = RoomForm(request.POST)
-    #     request.POST.get('name')
-    #     if form.is_valid():
-              
-    #        return HttpResponse("Form submitted successfully")
-    # else:
-    #     form = RoomForm()
     form  =  RoomForm()
     if  request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
+    else:
+        form = RoomForm()  #Move the  form instantiation here for GET requests    
             
             
         context = {'form': form}
-        return render(request, 'wera/room_form.html', context)        
-
-# rooms  = [
-#     {'id':1, 'name':'NewCastle!'},
-#     {'id':2, 'name':'Barcelona!'},
-#     {'id': 3, 'name':'chelsea!'},
-#     {'id': 4, 'name':'Manchester-Unitd'},
-#     {'id':5, 'name':'Arsenal'},
-#     {'id':6, 'name':'Real-Madrid'},
-#     {'id':7, 'name':'Totehnam-hotspur'},
-# ]
+        return render(request, 'wera/room_form.html', context) #used to render the template       
