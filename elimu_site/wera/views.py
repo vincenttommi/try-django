@@ -1,14 +1,18 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
-from . models import  Room
+from . models import  Room,Topic
 from  .forms import RoomForm
+
 # importing model Room
 # from  django.http import HttpResponse
 
 # Create your views here.
 def home(request,):
-    room = Room.objects.all()
-    context  = {'rooms':room}
+    rooms = Room.objects.all()
+    
+    topics = Topic.objects.all()
+    
+    context  = {'rooms': rooms, 'topics':topics}
     return render(request, 'wera/home.html', context)
 
 
@@ -64,3 +68,11 @@ def  updateRoom(request,pk):
     
     context = {'form':form} #  a form dictionary containing it's'form' variable
     return render(request, 'wera/room_form.html', context)
+
+
+def deleteRoom(request,pk):
+    room = Room.objects.get(id=pk)
+    if request.method == 'POST':
+        room.delete()
+        return redirect('home')
+    return render(request, 'wera/delete.html',{'obj':room})
