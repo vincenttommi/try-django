@@ -24,7 +24,13 @@
        <h3>Browse Topics</h3>
        <hr>
 
+  
 
+
+         <div>
+           <a href="{%  url  'home' %}">All</a>
+         </div>
+         {% comment %}when refreshing the page it should go  back to home {% endcomment %}
 
        {%  for  topic  in topics %}
          <div>
@@ -41,7 +47,7 @@
 
     <div>
 
-      z<a href="{% url 'update-room' room.id %}">Edit</a>
+      <a href="{% url 'update-room' room.id %}">Edit</a>
       <a href="{%   url 'delete-room'  room.id %}">Delete</a>
     <span>@{{room.host.username}}</span>
     <h5>{{room.id}} --{{room.name}}</h5>

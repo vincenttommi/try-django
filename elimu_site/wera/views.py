@@ -2,14 +2,25 @@ from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from . models import  Room,Topic
 from  .forms import RoomForm
+from  django.db.models import Q
 
 # importing model Room
 # from  django.http import HttpResponse
 
 # Create your views here.
 def home(request,):
-    rooms = Room.objects.all()
+     
+    q = request.GET.get('q') if request.GET.get('q') != None else ' '
+    #dictionary  parameter that contains all GETparameters passed in Http request
+    # request.GET.get('q) attempts to  retrieve the value of parameter from GET parameteres
     
+    rooms = Room.objects.filter(
+        Q(topic__name__icontains=q) |
+        Q(name__icontains=q)|
+        Q(description__icontains=q)
+    )
+    #performs a database query using object-Relational Mapping  to filter Rooms based on certain conditions
+      
     topics = Topic.objects.all()
     
     context  = {'rooms': rooms, 'topics':topics}
