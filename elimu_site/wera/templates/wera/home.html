@@ -41,6 +41,8 @@
 
 {% comment %} first container {% endcomment %}
 <div>
+
+    <a>{{room_count}}Rooms Available</a>
 <a href="{% url 'create-room'%}">Create  Room</a>
 <div>
     {%  for room in rooms %}

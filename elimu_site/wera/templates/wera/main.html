@@ -11,6 +11,19 @@
 <!-- tells django where to wrap all child templates  -->
 
 {% include 'wera/navbar.html' %}  
+{% if  messages %}
+<ul class="messages">
+    {%  for message in messages %}
+    <li {% if message.tags %} class="{{message.tags}}" {% endif %}{% endif%}>{{message}}</li>
+     {% endfor %}
+</ul>
+{% endif%}
+
+
+
+
+
+
     {% block content %}
 
 

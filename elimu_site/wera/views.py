@@ -3,6 +3,8 @@ from django.shortcuts import HttpResponse
 from . models import  Room,Topic
 from  .forms import RoomForm
 from  django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib import  messages
 
 # importing model Room
 # from  django.http import HttpResponse
@@ -22,8 +24,10 @@ def home(request,):
     #performs a database query using object-Relational Mapping  to filter Rooms based on certain conditions
       
     topics = Topic.objects.all()
+    room_count   = rooms.count()
+    #method to get number of rooms available intead of using  len()
     
-    context  = {'rooms': rooms, 'topics':topics}
+    context  = {'rooms': rooms, 'topics':topics, 'room_count': room_count}
     return render(request, 'wera/home.html', context)
 
 
@@ -87,3 +91,21 @@ def deleteRoom(request,pk):
         room.delete()
         return redirect('home')
     return render(request, 'wera/delete.html',{'obj':room})
+
+
+
+
+def loginP(request):
+    
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        try:
+            User  = User.objects.get(username=username)
+        except:
+            messages.error(request, 'User does not exists')    
+    
+    context = {}
+    return render(request, 'wera/login_register.html', context)
