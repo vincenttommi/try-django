@@ -8,6 +8,8 @@ from django.contrib import  messages
 from django.contrib.auth import authenticate,login
 from django.shortcuts  import  redirect
 from django.contrib.auth import  logout
+from django.contrib.auth.decorators import  login_required
+from django.http import  HttpResponse
 
 # importing model Room
 # from  django.http import HttpResponse
@@ -49,8 +51,16 @@ def navbar(request):
 
   # Import your RoomForm if not already imported
 
-            
+
+@login_required(login_url='/login')            
 def createRoom(request):
+    
+    #restricting other users from  creating room in another admins panel
+    
+    if request.user != room.host:
+        return HttpResponse("you are not allowed here")
+    
+    
     form  =  RoomForm()
     if  request.method == 'POST':
         form = RoomForm(request.POST)
@@ -70,10 +80,19 @@ def createRoom(request):
 # a specific Room object. It retrieves the existing room data, 
 # creates a form instance pre-filled with that data, 
 # and renders a template to display the form to the user for editing and updating.
+
+@login_required(login_url='/login')
 def  updateRoom(request,pk):
 
     room  = Room.objects.get(id=pk) #retrieves a specific Room object from the database using it's primary key
     form  = RoomForm(instance=room) # create  aform instance  for  the retrieved Room object (room)
+    
+    
+
+    #Restricting an authorized  users from acessing the  admin DashBoard
+    if request.user != room.host:
+        return HttpResponse("your are not allowed  here!")
+    
     
     #checking if the   data is posted and being redirected
     if request.method  == 'POST':
@@ -87,9 +106,18 @@ def  updateRoom(request,pk):
     context = {'form':form} #  a form dictionary containing it's'form' variable
     return render(request, 'wera/room_form.html', context)
 
-
+@login_required(login_url='/login')
 def deleteRoom(request,pk):
     room = Room.objects.get(id=pk)
+    
+    
+    
+    #Restricting  user from accessing  deleting other admins  users.
+    if request.user != room.host:
+        return HttpResponse("your are not allowed here")
+        
+    
+    
     if request.method == 'POST':
         room.delete()
         return redirect('home')
