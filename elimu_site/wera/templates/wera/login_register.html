@@ -17,26 +17,22 @@
      <input type="password" name="password" placeholder="Enter Password" />
 
     <input  type="submit" value="Login" />
-
-    <p>haven't  signed up yet?</p>
-    <a href="{%  url 'register'%}" > Sign up</a>
-
 </form>
+<p>haven't  signed up yet?</p>
+<a href="{%   url  'register' %}" > Sign up</a>
 </div>
 
-
+{% else %}
 
 <div>
 <form  method="POST"   action="">
     {% csrf_token %}
     {{form.as_p}}
     {% comment %} wraps the paragraph page that makes the styling better {% endcomment %}
-    <p>Already signed up yet?</p>
-    <a  href-"  {%  url 'login' %}">Login</a>
-
+    <input type="submit" value="Register"/>
 </form>
+<p>Already signed up yet?</p>
+<a  href="  {%  url 'login' %}">Login</a>
 </div>
-
-
 {%  endif %}
  {% endblock content %}%

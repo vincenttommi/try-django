@@ -166,22 +166,26 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
     
-def registerPage(request):
-    form = UserCreationForm(request.POST)
-    #writing an if statement that process the form
-    if request.method == 'POST':
 
+        
+def registerPage(request):
+    form = UserCreationForm()
+    user = None  # Initialize the user variable
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-        #getting current user name and updating to lowercase()
-        user.username = user.username.lower()
-        user.save()
-        login(request, user)
-        return redirect('home')
-    
+            # Getting the current username and updating to lowercase()
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            # Handle the case where the form is not valid
+            # For example, you can display an error message or redirect to a registration error page
+            return HttpResponse("Registration failed. Please check the form.")
     else:
-        messages.error(request, 'An error occured during registration')
-    
-    form = UserCreationForm()
-    return render(request, 'wera/login_register.html', {'form':form})       
-                
+        messages.error(request, 'An error occurred during registration')
+
+    return render(request, 'wera/login_register.html', {'form': form})    
