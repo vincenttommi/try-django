@@ -51,6 +51,11 @@
          {% comment %} {% comment %} hidding information of the user and only displaying when the 
          users are of certain hosts {% endcomment %} 
       {% if request.user  == rooom.host %}
+
+       {% comment %} debugging Info {% endcomment %}
+       <p>User:{{request.user }}</p>
+       <p>Host:{{room.host}}</p>
+       
       <a  href="{% url 'update-room' room.id %}">Edit</a>
       <a href="{%   url 'delete-room'  room.id %}">Delete</a>
 

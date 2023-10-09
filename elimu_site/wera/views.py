@@ -10,6 +10,7 @@ from django.shortcuts  import  redirect
 from django.contrib.auth import  logout
 from django.contrib.auth.decorators import  login_required
 from django.http import  HttpResponse
+from django.contrib.auth.forms import  UserCreationForm
 
 # importing model Room
 # from  django.http import HttpResponse
@@ -127,12 +128,21 @@ def deleteRoom(request,pk):
 
 
 def loginP(request):
+    
+    page  = 'login'
+    #redirecting user  to home-page after being authicated
+    
+    if request.user.is_authenticated:
+        return redirect('home')
+    
+    
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(username=username).lower()
         except User.DoesNotExist:
             messages.error(request, 'User does not exist')
             return redirect('login')
@@ -146,7 +156,7 @@ def loginP(request):
             messages.error(request, 'Username or password is incorrect')
             return redirect('login')
     
-    context = {}
+    context = {'page':page}
     return render(request, 'wera/login_register.html', context)
 
 
@@ -156,5 +166,22 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
     
-        
+def registerPage(request):
+    form = UserCreationForm(request.POST)
+    #writing an if statement that process the form
+    if request.method == 'POST':
+
+        if form.is_valid():
+            user = form.save(commit=False)
+        #getting current user name and updating to lowercase()
+        user.username = user.username.lower()
+        user.save()
+        login(request, user)
+        return redirect('home')
+    
+    else:
+        messages.error(request, 'An error occured during registration')
+    
+    form = UserCreationForm()
+    return render(request, 'wera/login_register.html', {'form':form})       
                 
