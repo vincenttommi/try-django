@@ -50,7 +50,7 @@
     <div>
          {% comment %} {% comment %} hidding information of the user and only displaying when the 
          users are of certain hosts {% endcomment %} 
-      {% if request.user  == rooom.host %}
+      {% comment %} {% if request.user  == rooom.host %} {% endcomment %}
 
        {% comment %} debugging Info {% endcomment %}
        <p>User:{{request.user }}</p>
@@ -59,11 +59,11 @@
       <a  href="{% url 'update-room' room.id %}">Edit</a>
       <a href="{%   url 'delete-room'  room.id %}">Delete</a>
 
-      {% endif %}
+      {% comment %} {% endif %} {% endcomment %}
 
     <span>@{{room.host.username}}</span>
     <h5>{{room.id}} --{{room.name}}</h5>
-    <small>{{room.topic.name}}</small> 
+    <small href="{% url 'home'%}">{{room.topic.name}}</small> 
     <hr>
     </div>
     {%  endfor %}

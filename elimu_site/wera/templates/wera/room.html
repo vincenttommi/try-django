@@ -1,14 +1,34 @@
 {% extends "wera/main.html"%}
 
-{% block content %}
-<h1>room welcome</h1>
-<div>
+{%  block content %}
+<h1>{{room.name}}</h1>
+<p>{{room.description}}</p>
 
-    {%  for room in rooms %}
-<div>
-<h1>{{room.id}} <a  href="{% url 'team' room.id %}"> {{room.name}}</a></h1>
+<div class="comment-wrapper">
+    <h3>Conversation</h3>
+     <hr>
 
-{% endfor %}
+     {%  for message in room_messages %}
+         <div>
+            
+
+          <small>@{{message.user}} {{message.created|timesince}} ago</small>
+
+          {{message.body}}
+         </div>
+     {% endfor %}   
 </div>
+{% comment %} if user is authenticated is able to post he's or her message {% endcomment %}
+{%  if request.user.is_authenticated %}
+<div class="comment-form">
+<form method="POST" action="">
+    {%  csrf_token %}
+    <input  type="text" name="body" placeholder="Write your message here"/>
+
+
+
+
+</form>
 </div>
-{%  endblock %} 
+{%  endif %}
+{% endblock %}

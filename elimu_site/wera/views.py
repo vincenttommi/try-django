@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
-from . models import  Room,Topic
+from . models import  Room,Topic, Message
 from  .forms import RoomForm
 from  django.db.models import Q
 from django.contrib.auth.models import User
@@ -39,8 +39,21 @@ def home(request,):
 
 def room(request,pk):
     
-    team  = Room.objects.get(id=pk)
-    context = {'rooms': room}  
+    room  = Room.objects.get(id=pk)
+    #giving  the set of message that are related to  this room
+    room_messages = room.message_set.all().order_by('-created')
+    
+    
+    #posting the messages that user has  submitted via the form
+    if request.method  == 'POST':
+        message = Message.objects.create(
+            user = request.user,
+            room = room,
+            body = request.POST.get('body')
+            
+        )    
+        return  redirect('room', pk=room.id)
+    context = {'room': room,'room_messages':room_messages}  
     return  render(request, 'wera/room.html', context)
 
 
@@ -142,7 +155,7 @@ def loginP(request):
         password = request.POST.get('password')
         
         try:
-            user = User.objects.get(username=username).lower()
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             messages.error(request, 'User does not exist')
             return redirect('login')
