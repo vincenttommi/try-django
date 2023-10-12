@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from . models import  Room,Topic, Message
 from  .forms import RoomForm
+#importing default forms from django models
 from  django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import  messages
@@ -42,6 +43,8 @@ def room(request,pk):
     room  = Room.objects.get(id=pk)
     #giving  the set of message that are related to  this room
     room_messages = room.message_set.all().order_by('-created')
+    participants = room.participants.all()
+    #getting all the participants related with this room and passing them into context dictionary
     
     
     #posting the messages that user has  submitted via the form
@@ -52,8 +55,10 @@ def room(request,pk):
             body = request.POST.get('body')
             
         )    
+        #before redirecting we are adding  adding participants to a user
+        room.participants.add(request.user)
         return  redirect('room', pk=room.id)
-    context = {'room': room,'room_messages':room_messages}  
+    context = {'room': room,'room_messages':room_messages,'participants':participants}  
     return  render(request, 'wera/room.html', context)
 
 
@@ -68,25 +73,24 @@ def navbar(request):
 
 @login_required(login_url='/login')            
 def createRoom(request):
-    
-    #restricting other users from  creating room in another admins panel
-    
-    if request.user != room.host:
-        return HttpResponse("you are not allowed here")
-    
-    
-    form  =  RoomForm()
-    if  request.method == 'POST':
+## Fetch the relevant room based on user (adjust this based on your model structure)    
+    try:
+        room = Room.objects.get(host=request.user)
+    except Room.DoesNotExist:
+        return HttpResponse("you are not allowed to created a room here") 
+    #checking if  request method is == POST and granting it permission to POST
+    if request.method  == 'POST':
         form = RoomForm(request.POST)
+        
+        #checking if form is valid
         if form.is_valid():
             form.save()
-            return redirect('home')
-    else:
-        form = RoomForm()  #Move the  form instantiation here for GET requests    
+            return redirect('home') 
+        else:
+            form  = RoomForm
             
-            
-        context = {'form': form}
-        return render(request, 'wera/room_form.html', context) #used to render the template       
+        context ={'form':form}
+        return render(request, 'wera/room_form.html', context) 
 
 
 
@@ -192,7 +196,7 @@ def registerPage(request):
             # Getting the current username and updating to lowercase()
             user.username = user.username.lower()
             user.save()
-            login(request, user)
+            login(request, user)    
             return redirect('home')
         else:
             # Handle the case where the form is not valid

@@ -23,10 +23,13 @@ class Room(models.Model):
     #relationship between    class Topic  and column topic in room table. 
     name  = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    #participants
+    participants = models.ManyToManyField(User, 
+        related_name='participants',blank=True 
+        )
     updated = models.DateTimeField(auto_now=True)
     created  = models.DateTimeField(auto_now_add=True)
-       
+    # has a many to many relationship where a  participant can have many rooms and many
+    # room can have many participants
        
     class Meta:
         ordering = ['-updated','-created']
