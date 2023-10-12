@@ -132,6 +132,7 @@ def deleteRoom(request,pk):
     if request.method == 'POST':
         room.delete()
         return redirect('home')
+    #redirects the user back to homepage after deleting the page
     return render(request, 'wera/delete.html',{'obj':room})
 
 
@@ -217,5 +218,6 @@ def deleteMessage(request, pk):
         #deletes the message
         message.delete()
         return redirect('home')
+    #redirects the user back to homepage after deleting the page
     return render(request, 'wera/delete.html',{'obj':message})
     
