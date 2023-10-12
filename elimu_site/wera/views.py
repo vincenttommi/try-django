@@ -61,13 +61,6 @@ def room(request,pk):
     context = {'room': room,'room_messages':room_messages,'participants':participants}  
     return  render(request, 'wera/room.html', context)
 
-
-def scores(request):
-    return render(request, 'wera/scores.html', {})
-
-def navbar(request):
-    return render(request, 'wera/navbar.html',{})
-
   # Import your RoomForm if not already imported
 
 
@@ -206,3 +199,23 @@ def registerPage(request):
         messages.error(request, 'An error occurred during registration')
 
     return render(request, 'wera/login_register.html', {'form': form})    
+
+
+
+#function for User deleting the Message
+@login_required(login_url='login')
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+    
+    #checking if  is eqaul to the correct host
+    if  request.user != message.user:
+        return HttpResponse("your are not  allowed he")
+    
+    
+    #checking if the method is post before posting the data
+    if request.method  == 'POST':
+        #deletes the message
+        message.delete()
+        return redirect('home')
+    return render(request, 'wera/delete.html',{'obj':message})
+    
