@@ -34,7 +34,10 @@ def home(request,):
     room_count   = rooms.count()
     #method to get number of rooms available intead of using  len()
     
-    context  = {'rooms': rooms, 'topics':topics, 'room_count': room_count}
+    
+    room_messages = Message.objects.all()
+    
+    context  = {'rooms': rooms, 'topics':topics, 'room_count': room_count,'room_messages':room_messages}
     return render(request, 'wera/home.html', context)
 
 

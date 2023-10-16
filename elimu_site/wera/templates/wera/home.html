@@ -1,74 +1,78 @@
- {% extends "wera/main.html" %}
+{% extends "wera/main.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .home-container {
+            display: grid;
+            grid-template-columns:1fr 3fr 1fr ;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Home welcome</h1>
+
+    <div class="home-container">
+        <div>
+            <h3>Browse Topics</h3>
+            <hr>
+
+            <div>
+                <a href="{% url 'home' %}">All</a>
+            </div>
+            {# When refreshing the page, it should go back to home. #}
+            {% for topic in topics %}
+            <div>
+                <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+        {# First container #}
+        <div>
+            <a>{{ room_count }} Rooms Available</a>
+            <a href="{% url 'create-room' %}">Create Room</a>
+            <div>
+                {% for room in rooms %}
+                <div>
+                    {# Hide information of the user and only display when the users are certain hosts #}
+                    {% if request.user == room.host %}
+                    {# Debugging Info #}
+                    <p>User: {{ request.user }}</p>
+                    <p>Host: {{ room.host }}</p>
+                    <a href="{% url 'update-room' room.id %}">Edit</a>
+                    <a href="{% url 'delete-room' room.id %}">Delete</a>
+                    {% endif %}
+                    <span>@{{ room.host.username }}</span>
+                    <h5>{{ room.id }} -- {{ room.name }}</h5>
+                    <small href="{% url 'home' %}">{{ room.topic.name }}</small>
+                    <hr>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+
+   
 
 
- {% block content%}
-
-<style>
-  .home-container{
-    display:grid;
-    grid-template-columns: 1fr 3fr;
-  }
-
-
-
-</style>
-
-<h1>Home welcome</h1>
-
-
-
-
-
-<div class="home-container">
     <div>
-       <h3>Browse Topics</h3>
-       <hr>
 
-  
+ <h3>Recently Activity</h3>
+ <hr>
+ {%    for message in  room_messages %}
+ <div>
 
 
-         <div>
-           <a href="{%  url  'home' %}">All</a>
-         </div>
-         {% comment %}when refreshing the page it should go  back to home {% endcomment %}
+<small>@{{message.user}}{{message.created|timesince}}</small>
+ </div>
+ {%  endfor  %}
+ 
 
-       {%  for  topic  in topics %}
-         <div>
-           <a href="{%  url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-         </div>
-       {%  endfor %}
     </div>
+</body>
 
-{% comment %} first container {% endcomment %}
-<div>
-
-    <a>{{room_count}}Rooms Available</a>
-<a href="{% url 'create-room'%}">Create  Room</a>
-<div>
-    {%  for room in rooms %}
-
-    <div>
-         {% comment %} {% comment %} hidding information of the user and only displaying when the 
-         users are of certain hosts {% endcomment %} 
-      {% comment %} {% if request.user  == rooom.host %} {% endcomment %}
-
-       {% comment %} debugging Info {% endcomment %}
-       <p>User:{{request.user }}</p>
-       <p>Host:{{room.host}}</p>
-       
-      <a  href="{% url 'update-room' room.id %}">Edit</a>
-      <a href="{%   url 'delete-room'  room.id %}">Delete</a>
-
-      {% comment %} {% endif %} {% endcomment %}
-
-    <span>@{{room.host.username}}</span>
-    <h5>{{room.id}} --{{room.name}}</h5>
-    <small href="{% url 'home'%}">{{room.topic.name}}</small> 
-    <hr>
-    </div>
-    {%  endfor %}
-</div>    
-    </div>
-</div>
-
-{% endblock %}
+</html>
+{% endblock content %}
