@@ -1,0 +1,18 @@
+<div>
+    {% for room in rooms %}
+    <div>
+        {# Hide information of the user and only display when the users are certain hosts #}
+        {% if request.user == room.host %}
+        {# Debugging Info #}
+        <p>User: {{ request.user }}</p>
+        <p>Host: {{ room.host }}</p>
+        <a href="{% url 'update-room' room.id %}">Edit</a>
+        <a href="{% url 'delete-room' room.id %}">Delete</a>
+        {% endif %}
+        <span>@{{ room.host.username }}</span>
+        <h5>{{ room.id }} -- {{ room.name }}</h5>
+        <small><a href="{% url 'home' %}">{{ room.topic.name }}</a></small>
+        <hr>
+    </div>
+    {% endfor %}
+</div>

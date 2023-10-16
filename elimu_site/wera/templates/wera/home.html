@@ -8,7 +8,7 @@
     <style>
         .home-container {
             display: grid;
-            grid-template-columns:1fr 3fr 1fr ;
+            grid-template-columns: 1fr 3fr 1fr;
         }
     </style>
 </head>
@@ -18,43 +18,17 @@
 
     <div class="home-container">
         <div>
-           {% include 'wera/topics_component.html' %}
+            {% include 'wera/topics_component.html' %}
         </div>
-        {# First container #}
         <div>
             <a>{{ room_count }} Rooms Available</a>
             <a href="{% url 'create-room' %}">Create Room</a>
-            <div>
-                {% for room in rooms %}
-                <div>
-                    {# Hide information of the user and only display when the users are certain hosts #}
-                    {% if request.user == room.host %}
-                    {# Debugging Info #}
-                    <p>User: {{ request.user }}</p>
-                    <p>Host: {{ room.host }}</p>
-                    <a href="{% url 'update-room' room.id %}">Edit</a>
-                    <a href="{% url 'delete-room' room.id %}">Delete</a>
-                    {% endif %}
-                    <span>@{{ room.host.username }}</span>
-                    <h5>{{ room.id }} -- {{ room.name }}</h5>
-                    <small><a href="{% url 'home' %}">{{ room.topic.name }}</a></small>
-                    <hr>
-                </div>
-                {% endfor %}
-            </div>
+            {% include 'wera/feed_component.html' %}
         </div>
-
-
-
-<div>
-
-</div>
-
-
-{% include "wera/activity_component.html" %}
+        <div>
+            {% include "wera/activity_component.html" %}
+        </div>
     </div>
-
-
 </body>
 
 </html>

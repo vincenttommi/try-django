@@ -224,3 +224,12 @@ def deleteMessage(request, pk):
     #redirects the user back to homepage after deleting the page
     return render(request, 'wera/delete.html',{'obj':message})
     
+    
+    
+    
+    
+def  userProfile(request):
+    
+    context = {}
+    
+    return render(request, 'wera/profile.html', context)
