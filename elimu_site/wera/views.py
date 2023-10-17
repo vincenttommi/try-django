@@ -102,7 +102,11 @@ def createRoom(request):
 
         # Checking if the form is valid
         if form.is_valid():
-            form.save()
+            
+            room  = form.save(commit=False)
+            #getting form instance and saving it
+            room.host  = request.user
+            room.save()
             return redirect('home')
     else:
         form = RoomForm()  # Create an instance of RoomForm

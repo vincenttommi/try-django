@@ -1,0 +1,35 @@
+{% extends "wera/main.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .home-container {
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Home welcome</h1>
+
+    <div class="home-container">
+        <div>
+            {% include 'wera/topics_component.html' %}
+        </div>
+        <div>
+            <a>{{ room_count }} Rooms Available</a>
+            <a href="{% url 'create-room' %}">Create Room</a>
+            {% include 'wera/feed_component.html' %}
+        </div>
+        <div>
+            {% include "wera/activity_component.html" %}
+        </div>
+    </div>
+</body>
+
+</html>
+{% endblock content %}
