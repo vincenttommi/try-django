@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models  import User
+#importing default user from django
 
 
 # Create your models here.
@@ -7,7 +8,6 @@ from django.contrib.auth.models  import User
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
-    
 
     def __str__(self):
         return self.name

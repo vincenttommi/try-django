@@ -67,26 +67,49 @@ def room(request,pk):
   # Import your RoomForm if not already imported
 
 
-@login_required(login_url='/login')            
+# @login_required(login_url='/login')            
+# def createRoom(request):
+# ## Fetch the relevant room based on user (adjust this based on your model structure)    
+#     try:
+#         room = Room.objects.get(host=request.user)
+#     except Room.DoesNotExist:
+#         return HttpResponse("you are not allowed to created a room here") 
+#     #checking if  request method is == POST and granting it permission to POST
+#     if request.method  == 'POST':
+#         form = RoomForm(request.POST)
+        
+#         #checking if form is valid
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home') 
+#         else:
+#             form  = RoomForm
+            
+#         context ={'form':form}
+#         return render(request, 'wera/room_form.html', context) 
+
+@login_required(login_url='/login')
 def createRoom(request):
-## Fetch the relevant room based on user (adjust this based on your model structure)    
+    # Fetch the relevant room based on the user (adjust this based on your model structure)
     try:
         room = Room.objects.get(host=request.user)
     except Room.DoesNotExist:
-        return HttpResponse("you are not allowed to created a room here") 
-    #checking if  request method is == POST and granting it permission to POST
-    if request.method  == 'POST':
+        return HttpResponse("You are not allowed to create a room here")
+
+    # Checking if the request method is POST and granting it permission to POST
+    if request.method == 'POST':
         form = RoomForm(request.POST)
-        
-        #checking if form is valid
+
+        # Checking if the form is valid
         if form.is_valid():
             form.save()
-            return redirect('home') 
-        else:
-            form  = RoomForm
-            
-        context ={'form':form}
-        return render(request, 'wera/room_form.html', context) 
+            return redirect('home')
+    else:
+        form = RoomForm()  # Create an instance of RoomForm
+
+    context = {'form': form}
+    return render(request, 'wera/room_form.html', context)
+
 
 
 
@@ -227,9 +250,20 @@ def deleteMessage(request, pk):
     
     
     
+
+
+#funcion to check user profile
+def  userProfile(request,pk):
+    user  =  User.objects.get(id=pk)
+    # an object that recieves   primary keys from  default User
     
-def  userProfile(request):
+    #getting all user rooms
+    rooms  =  user.room_set.all()  
+    room_messages = user.message_set.all()
+    #getting all  room_messages
+    topics  =  Topic.objects.all()
+    #getting all the user topics from db
     
-    context = {}
     
+    context = {'user':user, 'rooms':rooms,'room_messages':room_messages,'topics':topics }
     return render(request, 'wera/profile.html', context)

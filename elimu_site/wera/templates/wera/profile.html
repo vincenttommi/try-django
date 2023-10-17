@@ -1,6 +1,33 @@
 {%  extends 'wera/main.html'%}
 
-{%  block  content %}
-<h1>{{user.username}}</h1>
+{% block content %}
 
-{%  endblock content %}
+<style>
+
+
+.profile-container{
+
+
+    display:grid;
+    grid-template-columns:1fr 2fr  1fr;
+
+
+}
+</style>
+
+<h1>{{user.username}}</h1>
+<div  class="profile-container">
+    <div>
+         {% include "wera/topics_component.html" %}
+    </div>
+    <div>
+
+         {% include "wera/feed_component.html" %} 
+    </div>
+    <div>
+
+        {% include "wera/activity_component.html" %}
+    </div>
+
+</div>
+{%  endblock content %} 
