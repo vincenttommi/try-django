@@ -6,13 +6,14 @@
     </div>
     <ul class="topics__list">
       <li>
-        <a href="/" class="active">All <span>553</span></a>
+        <a href="/" class="active">All <span>{{topics.count}}</span></a>
       </li>
+      {% comment %} looping topics to  our template {% endcomment %}
 {% for topic in topics %}
       <li>
-        <a href="{% url  '{%  url 'home'%}?q={{topic.name}}' %}">Python <span>232</span></a>
+        <a href="{%  url 'home'%}?q={{topic.name}}">{{topic.name}}<span>{{topic.room_set.all.count}}</span></a>
       </li>
-{%  endfor    %}
+{% endfor%}
     </ul>
     <a class="btn btn--link" href="topics.html">
       More
