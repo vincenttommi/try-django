@@ -1,0 +1,80 @@
+{% extends "wera/main.html"%}
+
+{%  block content %}
+
+
+<style>
+    .room-container{
+        display:grid;
+        grid-template-columns:3fr 1fr ;
+        {% comment %} styles  for creating column  {% endcomment %}
+
+
+    }
+</style>
+
+<div class="room-container">
+
+    <div>
+
+
+   {% comment %} displaying the name and description of the user {% endcomment %}
+    <h1>{{room.name}}</h1>
+    <p>{{room.description}}</p>
+
+
+{% comment %} area for displayin conversation of the  users {% endcomment %}
+    <div class="comment-wrapper">
+        <h3>Conversation</h3>
+        <hr>
+
+        {% comment %} looping messages of the users from the template {% endcomment %}
+        {%  for message in room_messages %}
+            <div>
+                  {% comment %} wrote an  if statement that directs the user if 
+                  if request.user is equal to  message .user to redirect to another page {% endcomment %}
+                {%  if request.user == message.user %}
+                
+              <a  href="{%  url 'delete-message' message.id %}">Delete</a>
+
+              {% endif %}
+            <small>@{{message.user}} {{message.created|timesince}} ago</small>
+
+            {{message.body}}
+            </div>
+        {% endfor %}   
+    </div>
+    {% comment %} if user is authenticated is able to post he's or her message {% endcomment %}
+    {%  if request.user.is_authenticated %}
+    <div class="comment-form">
+    <form method="POST" action="">
+        {%  csrf_token %}
+        <input  type="text" name="body" placeholder="Write your message here"/>
+    </form>
+    </div>
+    {%  endif %}
+</div>
+
+<div>
+ 
+    <h3>Participants</h3>
+    <hr>
+
+    <div>
+        {% for user in participants %}
+        <div>
+            <p>@{{user.username}}</p>
+            <p>@{{user.username}}</p>
+            <p>@{{user.username}}</p>
+
+
+            
+        </div>
+        {% endfor %}
+    </div>
+     
+   
+</div>
+
+</div>
+{% endblock   %}
