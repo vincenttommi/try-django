@@ -92,7 +92,7 @@ def room(request,pk):
 def createRoom(request):
     # Fetch the relevant room based on the user (adjust this based on your model structure)
     try:
-        room = Room.objects.get(host=request.user)
+        room = Room.objects.filter(host=request.user)
     except Room.DoesNotExist:
         return HttpResponse("You are not allowed to create a room here")
 
@@ -102,7 +102,6 @@ def createRoom(request):
 
         # Checking if the form is valid
         if form.is_valid():
-            
             room  = form.save(commit=False)
             #getting form instance and saving it
             room.host  = request.user
