@@ -145,7 +145,7 @@ def  updateRoom(request,pk):
     
     
     context = {'form':form} #  a form dictionary containing it's'form' variable
-    return render(request, 'wera/room_form.html', context)
+    return render(request, 'wera/room.html', context)
 
 @login_required(login_url='/login')
 def deleteRoom(request,pk):
