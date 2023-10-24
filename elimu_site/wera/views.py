@@ -280,3 +280,12 @@ def  userProfile(request,pk):
     
     context = {'user':user, 'rooms':rooms,'room_messages':room_messages,'topics':topics }
     return render(request, 'wera/profile.html', context)
+
+
+
+
+#function based view for updating user
+@login_required(login_url='login')
+def updateUser(request):
+    
+    return render(request, 'wera/update-user.html')
