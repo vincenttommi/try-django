@@ -101,7 +101,7 @@ def createRoom(request):
         #getting the topic name from db
         topic_name = request.POST.get('topic')
         topic, created = Topic.objects.get_or_create(name=topic_name)
-        #if the method is not existing get would create it and if exist , it returns it
+        #if the method is not existing get would create it and if exist , it returns itc
         
         Room.objects.create(
             
@@ -139,10 +139,19 @@ def  updateRoom(request, pk):
         return HttpResponse("your are not allowed  here!")
     #checking if the   data is posted and being redirected
     if request.method  == 'POST':
-        form  = RoomForm(request.POST, instance=room)
-        if  form.is_valid():
-            form.save()
-            return  redirect('home')
+        
+        # query to get  all topics from db
+        topics_name = request.POST.get('topic')
+        topic, created  = Topic.objects.get_or_create(name=topics_name)
+        #if the method is not existing get would create it and if exist , it returns it
+        #
+        room.name = request.POST.get('name')
+        #query to get the name of the room
+        room.topic  = topic
+        #getting topic of newly created or edited by the user
+        room.description = request.POST.get('description')
+        room.save()
+        return  redirect('home')
 
     context = {'form':form, 'topics':topics, 'room':room } #  a form dictionary containing it's'form' variable
     return render(request, 'wera/room_form.html', context)
