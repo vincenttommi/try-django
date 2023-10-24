@@ -90,27 +90,34 @@ def room(request,pk):
 
 @login_required(login_url='/login')
 def createRoom(request):
-    # Fetch the relevant room based on the user (adjust this based on your model structure)
-    try:
-        room = Room.objects.filter(host=request.user)
-    except Room.DoesNotExist:
-        return HttpResponse("You are not allowed to create a room here")
+    form  =  RoomForm()
+    
+    #query to get topics from  db
+    topics = Topic.objects.all()
+    
+    #checking it request message  == POST
+    if request.method  == 'POST':
+        
+        #getting the topic name from db
+        topic_name = request.POST.get('topic')
+        topic, created = Topic.objects.get_or_create(name=topic_name)
+        #if the method is not existing get would create it and if exist , it returns it
+        
+        Room.objects.create(
+            
+            host  = request.user,
+            topic=topic,
+            #find the topic  in database or the newly created
+            name=request.POST.get('name'),
+            description=request.POST.get('description')
+            #getting description from the frontend
+            
+        )
+      
+        return redirect('home')
+            
 
-    # Checking if the request method is POST and granting it permission to POST
-    if request.method == 'POST':
-        form = RoomForm(request.POST)
-
-        # Checking if the form is valid
-        if form.is_valid():
-            room  = form.save(commit=False)
-            #getting form instance and saving it
-            room.host  = request.user
-            room.save()
-            return redirect('home')
-    else:
-        form = RoomForm()  # Create an instance of RoomForm
-
-    context = {'form': form}
+    context = {'form': form, 'topics':topics}
     return render(request, 'wera/room_form.html', context)
 
 
@@ -122,29 +129,23 @@ def createRoom(request):
 # and renders a template to display the form to the user for editing and updating.
 
 @login_required(login_url='/login')
-def  updateRoom(request,pk):
-
+def  updateRoom(request, pk):
     room  = Room.objects.get(id=pk) #retrieves a specific Room object from the database using it's primary key
     form  = RoomForm(instance=room) # create  aform instance  for  the retrieved Room object (room)
-    
-    
-
+    #query to get topics from  db
+    topics = Topic.objects.all()
     #Restricting an authorized  users from acessing the  admin DashBoard
     if request.user != room.host:
         return HttpResponse("your are not allowed  here!")
-    
-    
     #checking if the   data is posted and being redirected
     if request.method  == 'POST':
-        form  = RoomForm(request.POST,instance=room)
+        form  = RoomForm(request.POST, instance=room)
         if  form.is_valid():
             form.save()
             return  redirect('home')
-    
-    
-    
-    context = {'form':form} #  a form dictionary containing it's'form' variable
-    return render(request, 'wera/room.html', context)
+
+    context = {'form':form, 'topics':topics, 'room':room } #  a form dictionary containing it's'form' variable
+    return render(request, 'wera/room_form.html', context)
 
 @login_required(login_url='/login')
 def deleteRoom(request,pk):
