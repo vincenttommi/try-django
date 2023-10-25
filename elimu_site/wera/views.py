@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from . models import  Room,Topic, Message
-from  .forms import RoomForm
+from  .forms import RoomForm,UserForm
 #importing default forms from django models
 from  django.db.models import Q
 from django.contrib.auth.models import User
@@ -288,4 +288,17 @@ def  userProfile(request,pk):
 @login_required(login_url='login')
 def updateUser(request):
     
-    return render(request, 'wera/update-user.html') 
+    user = request.user
+    #query to get data of the user from form
+    form = UserForm(instance=request.user)
+    #creating instance of user created  from  default forms
+    
+    #condition for chekcking  incoming is post before posting the instance
+    if request.method  == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+        return redirect('user-profile', pk=user.id)
+            
+    
+    return render(request, 'wera/update-user.html',{'form':form}) 
