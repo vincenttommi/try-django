@@ -288,4 +288,4 @@ def  userProfile(request,pk):
 @login_required(login_url='login')
 def updateUser(request):
     
-    return render(request, 'wera/update-user.html')
+    return render(request, 'wera/update-user.html') 
