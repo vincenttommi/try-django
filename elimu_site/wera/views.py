@@ -30,7 +30,8 @@ def home(request,):
     )
     #performs a database query using object-Relational Mapping  to filter Rooms based on certain conditions
       
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5]
+    #limitting topics by  slicing to view only  five on the side-bar
     room_count   = rooms.count()
     #method to get number of rooms available intead of using  len()
     
@@ -301,4 +302,26 @@ def updateUser(request):
         return redirect('user-profile', pk=user.id)
             
     
-    return render(request, 'wera/update-user.html',{'form':form}) 
+    return render(request, 'wera/update-user.html',{'form':form})
+
+
+#function based for handling out topics
+def  topicsPage(request):
+    q = request.GET.get('q')if request.GET.get('q') != None else ''
+    #sending the request to topics to return them  when searching
+    topics  = Topic.objects.filter(name__icontains=q)
+    #query to filter  topics from db 
+    
+    return render(request, 'wera/topics.html', {'topics':topics})
+
+
+
+
+#Creating a function to render handle functions of activity
+def  activityPage(request):
+    
+    room_messags =  Message.objects.all()
+    #query to get all messages of various rooms
+    
+    
+    return render(request, 'wera/activity.html', {'room_messages':room_messags})
