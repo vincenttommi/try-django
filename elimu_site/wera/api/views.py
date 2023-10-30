@@ -12,12 +12,13 @@ from  wera.models import Message
 def  getRoutes(request):
      
     routes  =[
-        'GET /api/rooms',
+        # 'GET /api/rooms',
         #api route that get's a room
         'GET /api/rooms',
         'GET /api/rooms/:id',
       # route to  get all messages
          'GET/api/messages',  
+         'GET/api/messages/:id'
       ]  
     return Response(routes)
   
@@ -31,7 +32,14 @@ def getMessages(request):
   
   
   
-  
+@api_view(['GET'])
+def getMessage(request, pk):
+  # message  = Message.objects.all(pk=id)
+  message  = Message.objects.get(id=pk) 
+  # serializer = MessageSerializer(message, many=False)
+  serializer  =  MessageSerializer(message, many=False)
+  return Response(serializer.data)
+
   
 @api_view(['GET'])  
 def getRooms(request):
