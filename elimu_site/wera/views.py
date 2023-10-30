@@ -320,8 +320,8 @@ def  topicsPage(request):
 #Creating a function to render handle functions of activity
 def  activityPage(request):
     
-    room_messags =  Message.objects.all()
+    room_messages =  Message.objects.all()
     #query to get all messages of various rooms
     
     
-    return render(request, 'wera/activity.html', {'room_messages':room_messags})
+    return render(request, 'wera/activity.html', {'room_messages':room_messages})

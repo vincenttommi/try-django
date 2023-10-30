@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'wera.apps.WeraConfig',
-    'rest_framework'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
